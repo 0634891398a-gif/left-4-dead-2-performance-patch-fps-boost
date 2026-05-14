@@ -1,43 +1,52 @@
 ```markdown
 # CHANGELOG.md
 
-## [v2.4.1] - 2023-10-01
-### Improvements
-- **Increased framerate stability**: Enhanced the optimization of the game's rendering engine, resulting in up to 15% improvement in frame rates during intense horde sequences.
-- **AI Director enhancements**: Improved pathfinding algorithms for the AI Director, reducing instances of AI getting stuck and providing a smoother gameplay experience.
-  
-### Fixes
-- Fixed a bug that caused players to experience random crashes when joining a game on custom servers.
-- Resolved an issue where certain Add-ons could cause significant frame drops in certain maps, especially in "The Passing" campaign.
-  
-### Gameplay
-- Tweaked the spawn rates of Special Infected in "No Mercy" to provide a more balanced challenge.
+## [v2.4.1] - 2023-10-15
+### Fixed
+- Resolved an issue causing a significant drop in fps during intense Horde events in campaign modes.
+- Fixed graphic glitches occurring in the "Dark Carnival" map after recent updates.
 
-## [v2.3.0] - 2023-05-15
-### Improvements
-- **Optimized network performance**: Reduced lag during online play by enhancing the connection protocols, providing a smoother co-op experience.
-- Enhanced shader performance in maps like "Dark Carnival", allowing for better visual fidelity without sacrificing frame rate.
+### Improved
+- Enhanced the performance of the "Survival" mode by optimizing AI pathfinding, allowing for smoother gameplay when facing large waves of infected.
+- Reduced memory usage by optimizing texture loading, improving load times on all maps.
 
-### Fixes
-- Fixed a bug where the "Panic Event" in "Dead Center" was not properly triggering, leading to gameplay inconsistencies.
-- Addressed an issue where players would lose their secondary weapons after being incapacitated during a "Survivor Rescue" sequence.
+### Added
+- Introduced advanced graphical settings, allowing players to customize shadow quality and particle effects for better performance.
+- Added a Performance Monitoring Tool to track FPS and resource usage in real-time.
 
-### Gameplay
-- Adjusted the behavior of the Tank, making it more aggressive in later rounds of "Versus" mode.
+---
 
-## [v2.1.0] - 2023-02-10
-### Improvements
-- **New user interface for performance settings**: Implemented an in-game UI that allows players to easily adjust performance settings for optimal gameplay based on their hardware.
-- Improved loading times between maps in "The Sacrifice" campaign by optimizing asset handling.
+## [v2.3.0] - 2023-07-20
+### Improved
+- Significantly optimized the "No Mercy" campaign, leading to smoother transitions between chapters and less stutter during gameplay.
+- Tuning of server connection settings which enhances stability and reduces lag during online versus matches.
 
-### Fixes
-- Fixed an issue where the survivor's voice lines would double play when interacted with certain special items.
-- Resolved various crashes that occurred while loading custom maps.
+### Fixed
+- Fixed an issue where animations for common infected were causing frame drops in certain conditions.
+- Resolved occasional crashes during game startup under high load on older hardware.
 
-### Gameplay
-- Fine-tuned the game’s difficulty scaling in Expert mode to enhance the challenge for experienced players.
+### Added
+- Introduced a new "Low-Resource Mode" that helps improve game performance on lower-end systems.
 
-## [v2.0.0] - 2022-11-20
-### Major Features
-- **Performance overhaul**: Implemented a complete graphics engine overhaul for DX11 compatibility, resulting in improved visual quality and stability.
-- Introdu
+---
+
+## [v2.1.0] - 2023-05-10
+### Improved
+- Optimized the performance of the "Left 4 Dead 2" matchmaking system, providing faster server join times.
+- Enhanced the AI director with smarter resource management to better balance the gameplay intensity during campaigns.
+
+### Fixed
+- Addressed a memory leak that occurred during extended play sessions in "The Passing" and "The Sacrifice."
+- Fixed a rare crash that occurred when players were respawning after being incapacitated in "Dead Air".
+
+### Added
+- Added support for higher resolution textures for more powerful systems, giving better visual clarity without major performance costs.
+
+---
+
+## [v2.0.0] - 2023-01-30
+### Initial Release
+- Major performance overhaul enhancing the game engine for smoother gameplay across all modes.
+- Implemented dynamic load balancing for AI in ways that reacted smarter and more efficiently to player interactions.
+- Reworked the "Versus" mode to better optimize game flow and reduce ping times during matches.
+```
