@@ -1,101 +1,96 @@
 ```csharp
 using System;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace L4D2PerformancePatch
 {
     public partial class MainForm : Form
     {
+        private const string GameProcessName = "left4dead2";
         private Timer processCheckTimer;
-        private const string gameProcessName = "left4dead2";
-        private const string patchMessage = "Applying performance patch...";
-        
+        private Button patchButton;
+        private Label statusLabel;
+
         public MainForm()
         {
             InitializeComponent();
-            InitializeProcessCheckTimer();
+            InitializeCustomComponents();
         }
 
         private void InitializeComponent()
         {
-            this.checkButton = new System.Windows.Forms.Button();
-            this.statusLabel = new System.Windows.Forms.Label();
-            this.SuspendLayout();
-            // 
-            // checkButton
-            // 
-            this.checkButton.Location = new System.Drawing.Point(50, 40);
-            this.checkButton.Name = "checkButton";
-            this.checkButton.Size = new System.Drawing.Size(200, 40);
-            this.checkButton.TabIndex = 0;
-            this.checkButton.Text = "Patch L4D2 Performance";
-            this.checkButton.UseVisualStyleBackColor = true;
-            this.checkButton.Click += new System.EventHandler(this.CheckButton_Click);
-            // 
-            // statusLabel
-            // 
-            this.statusLabel.AutoSize = true;
-            this.statusLabel.Location = new System.Drawing.Point(50, 100);
-            this.statusLabel.Name = "statusLabel";
-            this.statusLabel.Size = new System.Drawing.Size(0, 13);
-            this.statusLabel.TabIndex = 1;
-            // 
-            // MainForm
-            // 
-            this.ClientSize = new System.Drawing.Size(300, 150);
-            this.Controls.Add(this.statusLabel);
-            this.Controls.Add(this.checkButton);
-            this.Name = "MainForm";
+            this.ClientSize = new System.Drawing.Size(300, 200);
             this.Text = "L4D2 Performance Patch";
-            this.ResumeLayout(false);
-            this.PerformLayout();
         }
 
-        private void InitializeProcessCheckTimer()
+        private void InitializeCustomComponents()
         {
-            processCheckTimer = new Timer();
-            processCheckTimer.Interval = 2000; // Check every 2 seconds
+            patchButton = new Button
+            {
+                Text = "Patch Game",
+                Dock = DockStyle.Fill
+            };
+            patchButton.Click += PatchButton_Click;
+
+            statusLabel = new Label
+            {
+                Text = "Waiting for game to start...",
+                Dock = DockStyle.Bottom,
+                TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+            };
+
+            this.Controls.Add(patchButton);
+            this.Controls.Add(statusLabel);
+
+            processCheckTimer = new Timer { Interval = 1000 };
             processCheckTimer.Tick += ProcessCheckTimer_Tick;
             processCheckTimer.Start();
         }
 
-        private void ProcessCheckTimer_Tick(object sender, EventArgs e)
+        private async void PatchButton_Click(object sender, EventArgs e)
         {
             if (IsGameRunning())
             {
-                statusLabel.Text = "Game is running. Click to apply patch.";
-                checkButton.Enabled = true;
+                statusLabel.Text = "Patching...";
+                await Task.Run(() => ApplyPerformancePatch());
+                statusLabel.Text = "Patch Applied Successfully!";
             }
             else
             {
-                statusLabel.Text = "Game is not running.";
-                checkButton.Enabled = false;
+                statusLabel.Text = "Game is not running. Please start L4D2.";
+            }
+        }
+
+        private void ProcessCheckTimer_Tick(object sender, EventArgs e)
+        {
+            if (!IsGameRunning())
+            {
+                statusLabel.Text = "Waiting for game to start...";
             }
         }
 
         private bool IsGameRunning()
         {
-            Process[] processes = Process.GetProcessesByName(gameProcessName);
-            return processes.Length > 0;
-        }
-
-        private void CheckButton_Click(object sender, EventArgs e)
-        {
-            if (IsGameRunning())
-            {
-                ApplyPerformancePatch();
-            }
-            else
-            {
-                MessageBox.Show("L4D2 is not running. Please start the game and try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
+            return Process.GetProcessesByName(GameProcessName).Any();
         }
 
         private void ApplyPerformancePatch()
         {
-            statusLabel.Text = patchMessage;
+            // Here, you would include the logic to apply the performance patch 
+            // (e.g., modifying config files, modifying the memory, etc.).
+            System.Threading.Thread.Sleep(2000); // Simulate patching delay
+        }
 
-            // Add the performance patch logic here (placeholder)
-            System
+        [STAThread]
+        static void Main()
+        {
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new MainForm());
+        }
+    }
+}
+```
