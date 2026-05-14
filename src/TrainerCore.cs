@@ -8,70 +8,69 @@ public class ProcessMemory
     private Process process;
     private IntPtr processHandle;
 
-    // Addresses of specific values in Left 4 Dead 2
-    private const int playerHealthAddress = 0x123456; // Replace with actual address
-    private const int playerAmmoAddress = 0x654321; // Replace with actual address
-
-    public bool AttachToProcess(string processName)
+    public void AttachToProcess(string processName)
     {
-        Process[] processes = Process.GetProcessesByName(processName);
-        if (processes.Length == 0)
-        {
-            return false; // Game not running
-        }
-
-        process = processes[0];
-        processHandle = OpenProcess(ProcessAccessFlags.All, false, process.Id);
-        return processHandle != IntPtr.Zero;
+        process = Process.GetProcessesByName(processName)[0];
+        processHandle = OpenProcess(ProcessAccessFlags.VirtualRead | ProcessAccessFlags.VirtualWrite, false, process.Id);
     }
 
-    public bool IsGameRunning(string processName)
+    public bool IsGameRunning()
     {
-        return Process.GetProcessesByName(processName).Length > 0;
+        return process != null && !process.HasExited;
     }
 
-    public float ReadFloat(int address)
+    public float ReadFloat(long address)
     {
-        byte[] buffer = new byte[4];
-        ReadProcessMemory(processHandle, (IntPtr)address, buffer, buffer.Length, out _);
+        byte[] buffer = new byte[sizeof(float)];
+        ReadProcessMemory(processHandle, (IntPtr)address, buffer, buffer.Length, out int bytesRead);
         return BitConverter.ToSingle(buffer, 0);
     }
 
-    public void WriteFloat(int address, float value)
+    public void WriteFloat(long address, float value)
     {
         byte[] buffer = BitConverter.GetBytes(value);
-        WriteProcessMemory(processHandle, (IntPtr)address, buffer, buffer.Length, out _);
+        WriteProcessMemory(processHandle, (IntPtr)address, buffer, buffer.Length, out int bytesWritten);
     }
 
-    public int ReadInt(int address)
+    public int ReadInt(long address)
     {
-        byte[] buffer = new byte[4];
-        ReadProcessMemory(processHandle, (IntPtr)address, buffer, buffer.Length, out _);
+        byte[] buffer = new byte[sizeof(int)];
+        ReadProcessMemory(processHandle, (IntPtr)address, buffer, buffer.Length, out int bytesRead);
         return BitConverter.ToInt32(buffer, 0);
     }
 
-    public void WriteInt(int address, int value)
+    public void WriteInt(long address, int value)
     {
         byte[] buffer = BitConverter.GetBytes(value);
-        WriteProcessMemory(processHandle, (IntPtr)address, buffer, buffer.Length, out _);
+        WriteProcessMemory(processHandle, (IntPtr)address, buffer, buffer.Length, out int bytesWritten);
     }
 
-    [DllImport("kernel32.dll")]
+    [DllImport("kernel32.dll", SetLastError = true)]
     private static extern IntPtr OpenProcess(ProcessAccessFlags processAccess, bool bInheritHandle, int processId);
 
-    [DllImport("kernel32.dll")]
+    [DllImport("kernel32.dll", SetLastError = true)]
     private static extern bool ReadProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, byte[] lpBuffer, int dwSize, out int lpNumberOfBytesRead);
 
-    [DllImport("kernel32.dll")]
+    [DllImport("kernel32.dll", SetLastError = true)]
     private static extern bool WriteProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, byte[] lpBuffer, int dwSize, out int lpNumberOfBytesWritten);
 
     [Flags]
-    private enum ProcessAccessFlags : uint
+    public enum ProcessAccessFlags : uint
     {
-        All = 0x1F0FFF,
-        Read = 0x0010,
-        Write = 0x0020,
-        Virtual = 0x0008,
+        VirtualRead = 0x0010,
+        VirtualWrite = 0x0020,
+        All = 0x001F0FFF
     }
+
+    // Static addresses
+    public const long PlayerHealthAddress = 0x00ABCDEF; // Example static address
+    public const long AmmoCountAddress = 0x00ABCDE0; // Example static address
+    public const long GameTimeAddress = 0x00ABCDE5; // Example static address
 }
-```
+
+public class TrainerCore
+{
+    private ProcessMemory processMemory = new ProcessMemory();
+    
+    public void Activate()
+    {
