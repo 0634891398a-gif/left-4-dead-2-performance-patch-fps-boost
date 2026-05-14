@@ -3,87 +3,92 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
+using System.Threading;
 
 namespace L4D2PerformancePatch
 {
     public partial class MainForm : Form
     {
-        private Timer processCheckTimer;
-        private const string GameProcessName = "Left4Dead2"; // Game executable name
-        private bool isGameRunning = false;
+        private const string GameProcessName = "left4dead2";
+        private const int CheckInterval = 2000; // 2 seconds
+        private Timer processDetectionTimer;
+        private Process gameProcess;
 
         public MainForm()
         {
             InitializeComponent();
-            InitializeCustomComponents();
+            StartProcessDetection();
         }
 
-        private void InitializeCustomComponents()
+        private void InitializeComponent()
         {
-            // Initialize Timer
-            processCheckTimer = new Timer();
-            processCheckTimer.Interval = 1000; // Check every second
-            processCheckTimer.Tick += ProcessCheckTimer_Tick;
-            processCheckTimer.Start();
+            this.Text = "Left 4 Dead 2 Performance Patch";
+            this.Size = new System.Drawing.Size(300, 200);
+            this.FormClosing += MainForm_FormClosing;
 
-            // Initialize Buttons
-            Button applyPatchButton = new Button
-            {
-                Text = "Apply Performance Patch",
-                Location = new System.Drawing.Point(10, 10)
-            };
-            applyPatchButton.Click += ApplyPatchButton_Click;
+            Button btnOptimize = new Button { Text = "Optimize", Dock = DockStyle.Top };
+            btnOptimize.Click += BtnOptimize_Click;
 
-            Button removePatchButton = new Button
-            {
-                Text = "Remove Performance Patch",
-                Location = new System.Drawing.Point(10, 50)
-            };
-            removePatchButton.Click += RemovePatchButton_Click;
+            Button btnRestore = new Button { Text = "Restore Defaults", Dock = DockStyle.Top };
+            btnRestore.Click += BtnRestore_Click;
 
-            Controls.Add(applyPatchButton);
-            Controls.Add(removePatchButton);
+            this.Controls.Add(btnRestore);
+            this.Controls.Add(btnOptimize);
+
+            processDetectionTimer = new Timer();
+            processDetectionTimer.Interval = CheckInterval;
+            processDetectionTimer.Tick += ProcessDetectionTimer_Tick;
         }
 
-        private void ProcessCheckTimer_Tick(object sender, EventArgs e)
+        private void StartProcessDetection()
         {
-            isGameRunning = Process.GetProcessesByName(GameProcessName).Any();
-            UpdateUIState();
+            processDetectionTimer.Start();
         }
 
-        private void UpdateUIState()
+        private void ProcessDetectionTimer_Tick(object sender, EventArgs e)
         {
-            // Enable/Disable buttons based on game state
-            foreach (Control control in Controls)
+            gameProcess = Process.GetProcessesByName(GameProcessName).FirstOrDefault();
+            if (gameProcess != null)
             {
-                control.Enabled = isGameRunning;
-            }
-        }
-
-        private void ApplyPatchButton_Click(object sender, EventArgs e)
-        {
-            if (isGameRunning)
-            {
-                // Implement your patch application logic here
-                MessageBox.Show("Performance patch applied!");
+                // Update UI or status as needed
+                this.Text = $"Left 4 Dead 2 Performance Patch - Running";
             }
             else
             {
-                MessageBox.Show("Left 4 Dead 2 is not running.");
+                this.Text = $"Left 4 Dead 2 Performance Patch - Not Running";
             }
         }
 
-        private void RemovePatchButton_Click(object sender, EventArgs e)
+        private void BtnOptimize_Click(object sender, EventArgs e)
         {
-            if (isGameRunning)
+            if (gameProcess != null)
             {
-                // Implement your patch removal logic here
-                MessageBox.Show("Performance patch removed!");
+                // Insert optimization logic here
+                MessageBox.Show("Optimization applied to Left 4 Dead 2!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
             {
-                MessageBox.Show("Left 4 Dead 2 is not running.");
+                MessageBox.Show("Please start Left 4 Dead 2 before optimizing.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
+        }
+
+        private void BtnRestore_Click(object sender, EventArgs e)
+        {
+            if (gameProcess != null)
+            {
+                // Insert logic to restore defaults here
+                MessageBox.Show("Defaults restored for Left 4 Dead 2!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                MessageBox.Show("Please start Left 4 Dead 2 before restoring defaults.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            processDetectionTimer.Stop();
+            processDetectionTimer.Dispose();
         }
     }
 }
