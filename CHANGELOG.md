@@ -1,43 +1,46 @@
 ```markdown
-# CHANGELOG.md
+# Changelog
 
-## [v2.4.1] - 2023-10-15
-### Enhancements
-- **Improved AI Pathfinding:** Optimized infected AI pathfinding algorithms to reduce latency and improve response times during horde encounters.
-- **Performance Boost for Custom Maps:** Enhanced loading times and frame rates for popular custom maps like "No Mercy" and "Dead Air" by optimizing asset handling.
+## [v2.4.1] - 2023-10-10
+### Added
+- Improved framerate stability during heavy gameplay situations in campaigns like "No Mercy" and "Death Toll".
+- Added an option to disable dynamic lighting for older systems to enhance performance.
 
-### Bug Fixes
-- Fixed an issue where players would occasionally experience sudden FPS drops during intense gameplay scenarios.
-- Resolved a bug that caused visual artifacts on the "Dark Carnival" maps under certain lighting conditions.
+### Fixed
+- Resolved an issue where the game's performance would degrade after extended playtime, particularly in the "Blood Harvest" map.
+- Fixed a bug causing significant drops in frame rates when playing with large amounts of infected on-screen, such as during "The Sacrifice" finale.
 
-## [v2.3.0] - 2023-08-05
-### Enhancements
-- **Adaptive Quality Settings:** Introduced a new adaptive graphics setting that automatically adjusts visual quality based on performance metrics.
-- **Network Optimizations:** Improved network code to reduce lag during cooperative and versus game modes, particularly on dedicated servers.
+## [v2.3.0] - 2023-06-15
+### Changed
+- Optimized pathfinding algorithms for Common Infected, reducing CPU load during intense horde encounters.
+- Adjustments to the way particle effects are rendered, improving performance in areas with heavy debris and smoke.
 
-### Bug Fixes
-- Fixed a memory leak that could occur when using the "Survival" game mode over extended periods.
-- Corrected collision issues on various maps that allowed players to exploit unintended areas.
+### Fixed
+- Addressed a crash issue when loading custom maps with heavy scripting in "The Passing".
+- Fixed stuttering problems in "Cold Stream" due to excessive background processes.
 
-## [v2.1.0] - 2023-05-12
-### Enhancements
-- **New Benchmark Tool:** Added a built-in benchmarking tool to allow players to test performance across different maps and find optimal settings.
-- **Improved Spectator Mode:** Enhanced spectator mode with smoother transitions and better frame rate handling during high-action scenes.
+## [v2.1.0] - 2023-03-01
+### Added
+- Introduced a new performance analytics tool to monitor system performance while playing, useful for fine-tuning settings.
+- Support for the latest graphics drivers from NVIDIA and AMD to ensure optimum performance.
 
-### Bug Fixes
-- Resolved an issue where users on high-refresh monitors experienced stuttering during gameplay.
-- Fixed a crash that occurred when joining a game while another player was loading into a different map.
+### Changed
+- Tweaked the AI Director to better balance the spawn rates of infected, reducing strain on system resources in later stage maps like "Dark Carnival".
 
-## [v2.0.0] - 2023-01-20
-### Major Features
-- **Performance Overhaul:** Implemented a comprehensive rewrite of the graphics rendering engine, offering support for modern GPU features.
-- **Multithreading Support:** Added support for multi-core processors to provide substantial performance improvements during intense gameplay.
+### Fixed
+- Fixed an issue where the screen would freeze temporarily when transitioning between saferoom and gameplay in "Hard Rain".
+- Resolved crashes linked to certain community mods impacting performance in "Swamp Fever".
 
-### Enhancements
-- Enhanced "Versus" mode performance by optimizing spawn mechanics for infected players.
-- Improved loading times for the "The Passing" campaign.
+## [v2.0.0] - 2022-12-01
+### Added
+- Introduced an extensive graphics options menu allowing players to tailor settings for optimal performance on varied hardware.
+- Added support for multi-core processors, enhancing performance on modern gaming setups.
 
-### Bug Fixes
-- Fixed intermittent crashes related to map transitions.
-- Addressed issues with sound desynchronization during multiplayer matches.
+### Changed
+- Major engine optimizations for rendering large hordes and detailed environments, particularly with maps featuring intense lighting like "Dead Air".
+
+### Fixed
+- Resolved graphical glitch that caused texture pop-in during the "Versus" mode.
+- Fixed frame rate issues in "The Parish" during crescendo events, ensuring smoother gameplay and fewer drops.
+
 ```
