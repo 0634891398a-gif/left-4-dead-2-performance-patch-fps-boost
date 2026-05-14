@@ -1,52 +1,50 @@
 ```markdown
 # CHANGELOG.md
 
+## [Unreleased]
+
 ## [v2.4.1] - 2023-10-15
-### Fixed
-- Resolved an issue causing a significant drop in fps during intense Horde events in campaign modes.
-- Fixed graphic glitches occurring in the "Dark Carnival" map after recent updates.
-
 ### Improved
-- Enhanced the performance of the "Survival" mode by optimizing AI pathfinding, allowing for smoother gameplay when facing large waves of infected.
-- Reduced memory usage by optimizing texture loading, improving load times on all maps.
-
-### Added
-- Introduced advanced graphical settings, allowing players to customize shadow quality and particle effects for better performance.
-- Added a Performance Monitoring Tool to track FPS and resource usage in real-time.
-
----
-
-## [v2.3.0] - 2023-07-20
-### Improved
-- Significantly optimized the "No Mercy" campaign, leading to smoother transitions between chapters and less stutter during gameplay.
-- Tuning of server connection settings which enhances stability and reduces lag during online versus matches.
+- Enhanced performance during high-action sequences, resulting in smoother gameplay during Tank encounters.
+- Optimized AI director pacing for better consistency in Horde events.
+- Adjusted rendering settings for lower-end systems, improving frame rates in maps like "No Mercy."
 
 ### Fixed
-- Fixed an issue where animations for common infected were causing frame drops in certain conditions.
-- Resolved occasional crashes during game startup under high load on older hardware.
+- Resolved an issue where screen tearing occurred when using V-Sync on certain configurations.
+- Fixed a bug that caused the game to crash during map transitions in campaign mode.
+- Corrected an audio issue where the "Boomer" sound effects would overlap, causing confusion during gameplay.
 
+## [v2.3.0] - 2023-08-10
 ### Added
-- Introduced a new "Low-Resource Mode" that helps improve game performance on lower-end systems.
+- Introduced detailed performance metrics overlay to assist players in troubleshooting FPS drops.
+- Added support for the latest graphics drivers to improve compatibility with newer hardware.
 
----
-
-## [v2.1.0] - 2023-05-10
-### Improved
-- Optimized the performance of the "Left 4 Dead 2" matchmaking system, providing faster server join times.
-- Enhanced the AI director with smarter resource management to better balance the gameplay intensity during campaigns.
+### Changed
+- Reworked lighting in several map areas, including "Dead Air," to reduce shader load and improve overall performance.
+- Tweaked the spawn mechanics for "Witch" special infected to enhance balance and reduce server load.
 
 ### Fixed
-- Addressed a memory leak that occurred during extended play sessions in "The Passing" and "The Sacrifice."
-- Fixed a rare crash that occurred when players were respawning after being incapacitated in "Dead Air".
+- Fixed various networking issues that caused latency spikes during online play, particularly in Survivor mode.
+- Resolved a problem with the "Pills" item not restoring health correctly in some game scenarios.
 
+## [v2.1.0] - 2023-05-05
+### Improved
+- Increased FPS stability in high-density areas, particularly on maps with heavy combat, like "Blood Harvest."
+- Enhanced performance of character models, reducing memory usage without compromising visual quality.
+
+### Changed
+- Fine-tuned animation rendering for infected models to lower CPU usage.
+- Adjusted the AI behavior in "The Last Stand" finale to enhance performance during the climactic battle.
+
+### Fixed
+- Resolved an exploit allowing players to trigger infinite respawn on certain campaign maps.
+- Fixed clipping issues with various melee weapons that would cause inconsistent hit detection.
+
+## [v2.0.0] - 2023-02-01
 ### Added
-- Added support for higher resolution textures for more powerful systems, giving better visual clarity without major performance costs.
+- Major performance optimization overhaul across all core systems, leading to significant FPS improvements.
+- Implemented new graphics settings for better control over texture quality and anti-aliasing options.
 
----
-
-## [v2.0.0] - 2023-01-30
-### Initial Release
-- Major performance overhaul enhancing the game engine for smoother gameplay across all modes.
-- Implemented dynamic load balancing for AI in ways that reacted smarter and more efficiently to player interactions.
-- Reworked the "Versus" mode to better optimize game flow and reduce ping times during matches.
-```
+### Changed
+- Redesigned the main menu to streamline access to performance settings.
+- Rebalanced resource allocation between the game engine and system memory, improving
