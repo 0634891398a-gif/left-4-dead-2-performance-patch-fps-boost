@@ -1,47 +1,49 @@
 ```markdown
 # CHANGELOG.md
 
-## [v2.4.1] - 2023-10-15
-### Improvements
-- **Optimized Special Infected AI**: Reduced processing overhead for Special Infected spawning, resulting in smoother gameplay during intense moments.
-- **Liquid Physics Enhancements**: Improved performance of fluid dynamics in campaigns like "Blood Harvest," reducing frame drops in rain-heavy maps.
+## [v2.4.1] - 2023-09-15
+### Added
+- **Optimized Map Loading**: Improved loading time for popular maps including "Dark Carnival" and "No Mercy".
+- **Dynamic Performance Adjustment**: Introduced a new feature that automatically adjusts graphics settings based on current FPS for smoother gameplay.
 
-### Fixes
-- **Fixed Crashes**: Addressed a rare crash that occurred when players entered versus mode with high custom content.
-- **Weapon Loadouts**: Corrected an issue where weapon loadouts would reset to default after changing servers.
+### Changed
+- **Improved AI Navigation**: Enhanced pathfinding for Special Infected, resulting in better chase behavior and strategic ambush tactics.
+- **Horde Spawning Tweaks**: Adjusted the spawning algorithm for the horde to ensure a more balanced gameplay experience.
+
+### Fixed
+- Resolved an issue that caused stuttering during intense moments in Versus mode.
+- Fixed a bug where players experienced frame drops when using the "Molotov Cocktail" or "Pipe Bomb".
 
 ---
 
-## [v2.3.0] - 2023-08-02
-### Features
-- **Dynamic Lighting Optimization**: Tweaked the rendering engine for better handling of dynamic lights, improving visibility in dark areas without sacrificing performance.
+## [v2.3.0] - 2023-07-20
+### Added
+- **Enhanced Texture Streaming**: Implemented a new texture streaming method to reduce texture pop-in on high-resolution settings.
+- **Performance Metrics Overlay**: Added an in-game overlay to display FPS, CPU, and GPU usage in real-time.
 
-### Improvements
-- **Smoother Animations**: Updated character animations to decrease stutter during fast-paced encounters with hordes.
-- **User Interface Refresh**: Minor UI tweaks for better responsiveness, especially in the Main Menu and the "Options" screen.
+### Changed
+- **Updated Shader Techniques**: Upgraded to more efficient shaders for improved visual fidelity without compromising performance.
+- **Lobby Performance Improvements**: Reduced resource usage when players are joining and leaving lobbies.
 
-### Fixes
-- **Server Stability**: Resolved issues with dedicated server crashes during peak player activity times.
-- **Local Co-op Issues**: Fixed a bug that affected the display of player names in local co-op mode.
+### Fixed
+- Addressed an issue where players with lower-spec hardware would experience crashes during cinematic sequences.
+- Fixed a memory leak occurring during long gameplay sessions in Survival mode.
 
 ---
 
 ## [v2.1.0] - 2023-05-10
-### Features
-- **New Matchmaking System**: Introduced a revised matchmaking algorithm for better balance in versus and survival modes.
-- **Custom Campaign Support**: Enhanced support for downloading and playing custom campaigns, allowing smoother integration through the Steam Workshop.
+### Added
+- **Custom Graphics Presets**: Introduced user-defined presets for quick adjustment of graphics settings based on hardware capabilities.
+- **Improved V-Sync Options**: Added adaptive V-Sync support to eliminate screen tearing while maintaining stable frame rates.
 
-### Improvements
-- **Network Performance**: Reduced latency and improved overall online performance in crowded multiplayer games.
-- **Resource Management**: Enhanced support for high-resolution textures without significant FPS drops.
+### Changed
+- **Multiplayer Server Optimization**: Enhanced server performance for smoother multiplayer experiences, particularly in high player count games.
+- **Weapon Sway Adjustments**: Tweaked the weapon sway mechanic for more responsive aiming during intense firefights.
 
-### Fixes
-- **Muting Issues**: Fixed a bug that prevented players from fully muting certain players in a lobby.
-- **Audio Sync**: Addresses audio delay issues in cutscenes that occurred on older hardware.
+### Fixed
+- Corrected an issue with the connection of some servers causing lag spikes during gameplay.
+- Resolved a problem that caused the game to crash when using custom mods with specific weapon skins.
 
 ---
 
-## [v2.0.0] - 2023-01-22
-### Features
-- **Graphics Engine Upgrade**: Major overhaul of the graphics engine to support modern hardware optimization, aiming for a smoother visual experience in all maps.
-- **Dedicated Server Browser**: Added an improved
+## [v2.0.0] -
