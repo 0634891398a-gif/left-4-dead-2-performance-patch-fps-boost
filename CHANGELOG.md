@@ -1,58 +1,47 @@
 ```markdown
-# Changelog
+# CHANGELOG.md
 
 ## [v2.4.1] - 2023-10-15
-### Fixed
-- Resolved an issue with the **AI Director** causing frame drops during horde events.
-- Fixed memory leak associated with the **Common Infected** spawning system.
-
 ### Improvements
-- Enhanced **Multi-core Rendering** support for smoother gameplay on multi-CPU systems.
-- Optimized textures for the **Zombie Models**, resulting in reduced loading times.
+- **Optimized Special Infected AI**: Reduced processing overhead for Special Infected spawning, resulting in smoother gameplay during intense moments.
+- **Liquid Physics Enhancements**: Improved performance of fluid dynamics in campaigns like "Blood Harvest," reducing frame drops in rain-heavy maps.
 
-### Performance
-- Improved overall frame rate stability during intense combat scenarios, particularly in **Dark Carnival** maps.
-- Reduced CPU utilization for special infected spawning, leading to smoother gameplay in large co-op sessions.
+### Fixes
+- **Fixed Crashes**: Addressed a rare crash that occurred when players entered versus mode with high custom content.
+- **Weapon Loadouts**: Corrected an issue where weapon loadouts would reset to default after changing servers.
 
 ---
 
-## [v2.3.0] - 2023-08-10
-### Added
-- Introduced support for **V-Sync** settings to minimize screen tearing during gameplay.
-- Added graphical setting adjustments for the **Boomer** bile effects, optimizing render performance.
-
-### Fixed
-- Corrected audio sync issues during **finale escape sequences** in **The Parish**.
-- Addressed graphical glitches with the **Managing Items** HUD during multiplayer matches.
+## [v2.3.0] - 2023-08-02
+### Features
+- **Dynamic Lighting Optimization**: Tweaked the rendering engine for better handling of dynamic lights, improving visibility in dark areas without sacrificing performance.
 
 ### Improvements
-- Increased loading speeds on **The Passing** campaign by optimizing map load routines.
-- Tweaked the **Director's AI** to reduce unexpected spawns during low player counts, enhancing game pacing.
+- **Smoother Animations**: Updated character animations to decrease stutter during fast-paced encounters with hordes.
+- **User Interface Refresh**: Minor UI tweaks for better responsiveness, especially in the Main Menu and the "Options" screen.
+
+### Fixes
+- **Server Stability**: Resolved issues with dedicated server crashes during peak player activity times.
+- **Local Co-op Issues**: Fixed a bug that affected the display of player names in local co-op mode.
 
 ---
 
-## [v2.1.0] - 2023-06-18
-### Added
-- Added new debug tools for modders to analyze performance on custom maps.
-- Introduced an option for **Enhanced Lighting Effects** toggle to improve frame rates on older hardware.
-
-### Fixed
-- Fixed a crash associated with the **Tank** model spawning animations in custom servers.
-- Resolved issues with the **Survivors** health UI not displaying correctly in certain conditions.
+## [v2.1.0] - 2023-05-10
+### Features
+- **New Matchmaking System**: Introduced a revised matchmaking algorithm for better balance in versus and survival modes.
+- **Custom Campaign Support**: Enhanced support for downloading and playing custom campaigns, allowing smoother integration through the Steam Workshop.
 
 ### Improvements
-- Adjusted the way **Special Infected** are spawned to reduce lag during encounters.
-- Improved load times on popular community maps by pre-caching assets more efficiently.
+- **Network Performance**: Reduced latency and improved overall online performance in crowded multiplayer games.
+- **Resource Management**: Enhanced support for high-resolution textures without significant FPS drops.
+
+### Fixes
+- **Muting Issues**: Fixed a bug that prevented players from fully muting certain players in a lobby.
+- **Audio Sync**: Addresses audio delay issues in cutscenes that occurred on older hardware.
 
 ---
 
-## [v2.0.0] - 2023-04-10
-### Added
-- Major overhaul of the graphics engine for improved performance on modern hardware.
-- Added a new **Performance Mode** that streamlines graphical settings for lower-end PCs.
-
-### Fixed
-- Fixed stuttering issues when switching weapons during high-mobility sequences.
-- Addressed a bug where player models would temporarily disappear during intense firefights.
-
-###
+## [v2.0.0] - 2023-01-22
+### Features
+- **Graphics Engine Upgrade**: Major overhaul of the graphics engine to support modern hardware optimization, aiming for a smoother visual experience in all maps.
+- **Dedicated Server Browser**: Added an improved
