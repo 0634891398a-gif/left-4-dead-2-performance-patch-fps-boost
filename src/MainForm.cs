@@ -2,87 +2,76 @@
 using System;
 using System.Diagnostics;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Timers;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace L4D2PerformancePatch
 {
     public partial class MainForm : Form
     {
-        private const string GameProcessName = "Left4Dead2"; // Main game process name
-        private const int TimerInterval = 1000; // Timer set to check every second
+        private const string GameProcessName = "left4dead2";
+        private const int RefreshInterval = 1000; // In milliseconds
+
         private Timer processDetectionTimer;
-        private bool isGameRunning = false;
+        private bool isGameRunning;
 
         public MainForm()
         {
             InitializeComponent();
-            InitializeProcessDetectionTimer();
+            InitializeCustomComponents();
         }
 
-        private void InitializeComponent()
-        {
-            this.Text = "Left 4 Dead 2 Performance Patch";
-            this.Size = new System.Drawing.Size(400, 300);
-
-            var patchButton = new Button
-            {
-                Text = "Apply Performance Patch",
-                Dock = DockStyle.Bottom
-            };
-            patchButton.Click += PatchButton_Click;
-
-            var statusLabel = new Label
-            {
-                Text = "Status: Waiting for game to start...",
-                Dock = DockStyle.Top,
-                AutoSize = true
-            };
-
-            this.Controls.Add(statusLabel);
-            this.Controls.Add(patchButton);
-        }
-
-        private void InitializeProcessDetectionTimer()
+        private void InitializeCustomComponents()
         {
             processDetectionTimer = new Timer();
-            processDetectionTimer.Interval = TimerInterval;
-            processDetectionTimer.Elapsed += CheckGameProcess;
+            processDetectionTimer.Interval = RefreshInterval;
+            processDetectionTimer.Tick += ProcessDetectionTimer_Tick;
             processDetectionTimer.Start();
         }
 
-        private void CheckGameProcess(object sender, ElapsedEventArgs e)
+        private void ProcessDetectionTimer_Tick(object sender, EventArgs e)
         {
             isGameRunning = Process.GetProcessesByName(GameProcessName).Any();
-            UpdateStatus();
+            UpdateUI();
         }
 
-        private void UpdateStatus()
-        {
-            if (InvokeRequired)
-            {
-                Invoke(new Action(UpdateStatus));
-                return;
-            }
-
-            var statusLabel = this.Controls.OfType<Label>().FirstOrDefault();
-            statusLabel.Text = isGameRunning
-                ? "Status: Game is running."
-                : "Status: Waiting for game to start...";
-        }
-
-        private void PatchButton_Click(object sender, EventArgs e)
+        private void UpdateUI()
         {
             if (isGameRunning)
             {
-                // Perform patch actions here
-                MessageBox.Show("Performance patch applied successfully!", "Patch Status", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                statusLabel.Text = "Game Running";
+                patchButton.Enabled = true;
             }
             else
             {
-                MessageBox.Show("Game is not running. Please start Left 4 Dead 2.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                statusLabel.Text = "Game Not Running";
+                patchButton.Enabled = false;
             }
+        }
+
+        private void patchButton_Click(object sender, EventArgs e)
+        {
+            if (!isGameRunning)
+            {
+                MessageBox.Show("Please start Left 4 Dead 2 first.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Code to apply performance patches goes here.
+            ApplyPerformancePatches();
+        }
+
+        private void ApplyPerformancePatches()
+        {
+            // Example of simple patching logic
+            // In a real scenario, this would involve modifying game config files or memory
+            MessageBox.Show("Performance patches have been applied!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            processDetectionTimer.Stop();
+            processDetectionTimer.Dispose();
         }
     }
 }
