@@ -3,77 +3,72 @@ using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
-public class ProcessMemory
+public static class ProcessMemory
 {
-    private Process gameProcess;
-    private IntPtr processHandle;
+    private const int PROCESS_VM_READ = 0x0010;
+    private const int PROCESS_VM_WRITE = 0x0020;
+    private const int PROCESS_VM_OPERATION = 0x0008;
 
-    // Static addresses for Left 4 Dead 2
-    private static readonly IntPtr healthAddress = (IntPtr)0x01234567; // Example address
-    private static readonly IntPtr ammoAddress = (IntPtr)0x01234568;   // Example address
+    private static Process gameProcess;
+    private static IntPtr processHandle;
 
-    public bool AttachToProcess(string processName)
+    // Static addresses for Left 4 Dead 2-specific values (example addresses)
+    private const int PLAYER_HEALTH_ADDRESS = 0x01234567;
+    private const int PLAYER_AMMO_ADDRESS = 0x01234568;
+    
+    public static bool AttachToProcess(string processName)
     {
-        foreach (var process in Process.GetProcessesByName(processName))
+        try
         {
-            gameProcess = process;
-            processHandle = OpenProcess(ProcessAccessFlags.All, false, process.Id);
+            gameProcess = Process.GetProcessesByName(processName)[0];
+            processHandle = OpenProcess(PROCESS_VM_READ | PROCESS_VM_WRITE | PROCESS_VM_OPERATION, false, gameProcess.Id);
             return processHandle != IntPtr.Zero;
         }
-
-        return false;
+        catch (IndexOutOfRangeException)
+        {
+            Console.WriteLine("Game process not found.");
+            return false;
+        }
     }
 
-    public bool IsGameRunning(string processName)
+    public static bool IsGameRunning(string processName)
     {
         return Process.GetProcessesByName(processName).Length > 0;
     }
 
-    public float ReadFloat(IntPtr address)
+    public static float ReadFloat(int address)
     {
         byte[] buffer = new byte[4];
-        ReadProcessMemory(processHandle, address, buffer, buffer.Length, out _);
+        ReadProcessMemory(processHandle, (IntPtr)address, buffer, buffer.Length, out int bytesRead);
         return BitConverter.ToSingle(buffer, 0);
     }
 
-    public void WriteFloat(IntPtr address, float value)
+    public static void WriteFloat(int address, float value)
     {
         byte[] buffer = BitConverter.GetBytes(value);
-        WriteProcessMemory(processHandle, address, buffer, buffer.Length, out _);
+        WriteProcessMemory(processHandle, (IntPtr)address, buffer, buffer.Length, out int bytesWritten);
     }
 
-    public int ReadInt(IntPtr address)
+    public static int ReadInt(int address)
     {
         byte[] buffer = new byte[4];
-        ReadProcessMemory(processHandle, address, buffer, buffer.Length, out _);
+        ReadProcessMemory(processHandle, (IntPtr)address, buffer, buffer.Length, out _);
         return BitConverter.ToInt32(buffer, 0);
     }
 
-    public void WriteInt(IntPtr address, int value)
+    public static void WriteInt(int address, int value)
     {
         byte[] buffer = BitConverter.GetBytes(value);
-        WriteProcessMemory(processHandle, address, buffer, buffer.Length, out _);
+        WriteProcessMemory(processHandle, (IntPtr)address, buffer, buffer.Length, out int bytesWritten);
     }
 
     [DllImport("kernel32.dll")]
-    private static extern IntPtr OpenProcess(ProcessAccessFlags processAccess, bool bInheritHandle, int processId);
+    private static extern IntPtr OpenProcess(int dwDesiredAccess, bool bInheritHandle, int dwProcessId);
 
     [DllImport("kernel32.dll")]
     private static extern bool ReadProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, byte[] lpBuffer, int dwSize, out int lpNumberOfBytesRead);
 
     [DllImport("kernel32.dll")]
     private static extern bool WriteProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, byte[] lpBuffer, int dwSize, out int lpNumberOfBytesWritten);
-
-    [Flags]
-    public enum ProcessAccessFlags : uint
-    {
-        All = 0x1F0FFF,
-        Read = 0x0010,
-        Write = 0x0020,
-        VMOperation = 0x0008,
-        VMRead = 0x0010,
-        VMWrite = 0x0020,
-        Duplicating = 0x0040
-    }
 }
 ```
