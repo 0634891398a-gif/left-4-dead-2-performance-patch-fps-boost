@@ -1,49 +1,50 @@
 ```markdown
-# CHANGELOG.md
+# Changelog for Left 4 Dead 2 Performance Patch
 
-## [v2.4.1] - 2023-09-15
+## [v2.4.1] - 2023-10-15
 ### Added
-- **Optimized Map Loading**: Improved loading time for popular maps including "Dark Carnival" and "No Mercy".
-- **Dynamic Performance Adjustment**: Introduced a new feature that automatically adjusts graphics settings based on current FPS for smoother gameplay.
+- Enhanced AI pathfinding for Special Infected, reducing lag during intense survivor encounters.
+- New options to toggle advanced graphic settings specifically for high-density NPC scenarios.
 
 ### Changed
-- **Improved AI Navigation**: Enhanced pathfinding for Special Infected, resulting in better chase behavior and strategic ambush tactics.
-- **Horde Spawning Tweaks**: Adjusted the spawning algorithm for the horde to ensure a more balanced gameplay experience.
+- Optimized rendering of blood splatter effects, resulting in smoother gameplay during intense action sequences.
+- Adjusted performance tracking for more accurate FPS reporting when using the Director.
 
 ### Fixed
-- Resolved an issue that caused stuttering during intense moments in Versus mode.
-- Fixed a bug where players experienced frame drops when using the "Molotov Cocktail" or "Pipe Bomb".
+- Resolved a memory leak that occurred during extended gameplay sessions, preventing crashes when playing on custom maps.
+- Fixed an issue with the in-game overlay causing frame drops while using the console in versus mode.
 
----
-
-## [v2.3.0] - 2023-07-20
+## [v2.3.0] - 2023-08-10
 ### Added
-- **Enhanced Texture Streaming**: Implemented a new texture streaming method to reduce texture pop-in on high-resolution settings.
-- **Performance Metrics Overlay**: Added an in-game overlay to display FPS, CPU, and GPU usage in real-time.
+- Introduced a new option to disable ambient occlusion effects for improved performance on lower-end hardware.
+- Integrated a frame rate cap toggle to help stabilize FPS during hectic gameplay moments.
 
 ### Changed
-- **Updated Shader Techniques**: Upgraded to more efficient shaders for improved visual fidelity without compromising performance.
-- **Lobby Performance Improvements**: Reduced resource usage when players are joining and leaving lobbies.
+- Reworked the physics engine related to explosive interactions, improving overall game fluidity.
+- Improved shader compilation time to reduce stuttering when loading new game sessions.
 
 ### Fixed
-- Addressed an issue where players with lower-spec hardware would experience crashes during cinematic sequences.
-- Fixed a memory leak occurring during long gameplay sessions in Survival mode.
+- Patched a bug that caused character models to render incorrectly under certain lighting conditions, impacting visual fidelity.
+- Fixed random crashes experienced in the 'The Passing' map during finale events.
 
----
-
-## [v2.1.0] - 2023-05-10
+## [v2.1.0] - 2023-05-12
 ### Added
-- **Custom Graphics Presets**: Introduced user-defined presets for quick adjustment of graphics settings based on hardware capabilities.
-- **Improved V-Sync Options**: Added adaptive V-Sync support to eliminate screen tearing while maintaining stable frame rates.
+- Launch parameters for better custom configuration support on lower settings, allowing for enhanced player optimization.
+- Anti-aliasing settings adjustments for smoother edges without significant performance hits.
 
 ### Changed
-- **Multiplayer Server Optimization**: Enhanced server performance for smoother multiplayer experiences, particularly in high player count games.
-- **Weapon Sway Adjustments**: Tweaked the weapon sway mechanic for more responsive aiming during intense firefights.
+- Tweaked the sound processing engine to reduce CPU usage, allowing for fuller sound while maintaining performance.
+- Adjusted the spawning rate of Common Infected to enhance server stability during local play.
 
 ### Fixed
-- Corrected an issue with the connection of some servers causing lag spikes during gameplay.
-- Resolved a problem that caused the game to crash when using custom mods with specific weapon skins.
+- Fixed an issue where players experienced delayed input while navigating menus during online play.
+- Resolved graphical glitches on specific high-resolution displays when running the game at ultra settings.
 
----
+## [v2.0.0] - 2023-02-23
+### Added
+- Complete overhaul of the rendering pipeline, leading to improved graphics without sacrificing performance on medium-end PCs.
+- Added presets for easy graphic customization (Low, Medium, High) to help players choose the best settings for their system.
 
-## [v2.0.0] -
+### Changed
+- Updated the multiplayer lobby system for better matchmaking and reduced waiting times.
+- Performance measurements
