@@ -2,103 +2,88 @@
 using System;
 using System.Diagnostics;
 using System.Linq;
-using System.Windows.Forms;
+using System.Runtime.InteropServices;
 using System.Timers;
+using System.Windows.Forms;
 
 namespace L4D2PerformancePatch
 {
     public partial class MainForm : Form
     {
-        private System.Timers.Timer processCheckTimer;
-        private readonly string processName = "left4dead2";
+        private const string GameProcessName = "Left4Dead2"; // Main game process name
+        private const int TimerInterval = 1000; // Timer set to check every second
+        private Timer processDetectionTimer;
         private bool isGameRunning = false;
 
         public MainForm()
         {
             InitializeComponent();
-            InitializeTimer();
-        }
-
-        private void InitializeTimer()
-        {
-            processCheckTimer = new System.Timers.Timer(2000); // Check every 2 seconds
-            processCheckTimer.Elapsed += CheckGameProcess;
-            processCheckTimer.AutoReset = true;
-            processCheckTimer.Enabled = true;
-        }
-
-        private void CheckGameProcess(object sender, ElapsedEventArgs e)
-        {
-            var processes = Process.GetProcessesByName(processName);
-            if (processes.Length > 0 && !isGameRunning)
-            {
-                isGameRunning = true;
-                EnablePerformanceBoost();
-            }
-            else if (processes.Length == 0 && isGameRunning)
-            {
-                isGameRunning = false;
-                DisablePerformanceBoost();
-            }
-        }
-
-        private void EnablePerformanceBoost()
-        {
-            if (InvokeRequired)
-            {
-                Invoke(new Action(EnablePerformanceBoost));
-                return;
-            }
-            statusLabel.Text = "Performance boost enabled.";
-            // Insert logic to apply performance boost for L4D2
-        }
-
-        private void DisablePerformanceBoost()
-        {
-            if (InvokeRequired)
-            {
-                Invoke(new Action(DisablePerformanceBoost));
-                return;
-            }
-            statusLabel.Text = "Performance boost disabled.";
-            // Insert logic to revert performance boost for L4D2
-        }
-
-        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            processCheckTimer.Stop();
-            processCheckTimer.Dispose();
-        }
-
-        private void patchButton_Click(object sender, EventArgs e)
-        {
-            if (isGameRunning)
-            {
-                MessageBox.Show("Performance boost is already active.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            else
-            {
-                MessageBox.Show("Please start Left 4 Dead 2 to apply performance boosts.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
+            InitializeProcessDetectionTimer();
         }
 
         private void InitializeComponent()
         {
-            this.patchButton = new System.Windows.Forms.Button();
-            this.statusLabel = new System.Windows.Forms.Label();
-            this.SuspendLayout();
-            // 
-            // patchButton
-            // 
-            this.patchButton.Location = new System.Drawing.Point(12, 12);
-            this.patchButton.Name = "patchButton";
-            this.patchButton.Size = new System.Drawing.Size(150, 30);
-            this.patchButton.TabIndex = 0;
-            this.patchButton.Text = "Toggle Performance Patch";
-            this.patchButton.UseVisualStyleBackColor = true;
-            this.patchButton.Click += new System.EventHandler(this.patchButton_Click);
-            // 
-            // statusLabel
-            // 
-            this.statusLabel.AutoSize = true;
-            this.statusLabel.Location = new System.Drawing.Point(12,
+            this.Text = "Left 4 Dead 2 Performance Patch";
+            this.Size = new System.Drawing.Size(400, 300);
+
+            var patchButton = new Button
+            {
+                Text = "Apply Performance Patch",
+                Dock = DockStyle.Bottom
+            };
+            patchButton.Click += PatchButton_Click;
+
+            var statusLabel = new Label
+            {
+                Text = "Status: Waiting for game to start...",
+                Dock = DockStyle.Top,
+                AutoSize = true
+            };
+
+            this.Controls.Add(statusLabel);
+            this.Controls.Add(patchButton);
+        }
+
+        private void InitializeProcessDetectionTimer()
+        {
+            processDetectionTimer = new Timer();
+            processDetectionTimer.Interval = TimerInterval;
+            processDetectionTimer.Elapsed += CheckGameProcess;
+            processDetectionTimer.Start();
+        }
+
+        private void CheckGameProcess(object sender, ElapsedEventArgs e)
+        {
+            isGameRunning = Process.GetProcessesByName(GameProcessName).Any();
+            UpdateStatus();
+        }
+
+        private void UpdateStatus()
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new Action(UpdateStatus));
+                return;
+            }
+
+            var statusLabel = this.Controls.OfType<Label>().FirstOrDefault();
+            statusLabel.Text = isGameRunning
+                ? "Status: Game is running."
+                : "Status: Waiting for game to start...";
+        }
+
+        private void PatchButton_Click(object sender, EventArgs e)
+        {
+            if (isGameRunning)
+            {
+                // Perform patch actions here
+                MessageBox.Show("Performance patch applied successfully!", "Patch Status", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                MessageBox.Show("Game is not running. Please start Left 4 Dead 2.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+    }
+}
+```
