@@ -1,54 +1,58 @@
 ```markdown
-# CHANGELOG.md
+# Changelog
 
-## [v2.4.1] - 2023-10-01
+## [v2.4.1] - 2023-10-15
+### Fixed
+- Resolved an issue with the **AI Director** causing frame drops during horde events.
+- Fixed memory leak associated with the **Common Infected** spawning system.
+
+### Improvements
+- Enhanced **Multi-core Rendering** support for smoother gameplay on multi-CPU systems.
+- Optimized textures for the **Zombie Models**, resulting in reduced loading times.
+
+### Performance
+- Improved overall frame rate stability during intense combat scenarios, particularly in **Dark Carnival** maps.
+- Reduced CPU utilization for special infected spawning, leading to smoother gameplay in large co-op sessions.
+
+---
+
+## [v2.3.0] - 2023-08-10
 ### Added
-- Improved performance of the "Survival Mode" map loading, reducing load times by up to 20%.
-- New optimization settings for "Advanced Graphics" in options menu.
+- Introduced support for **V-Sync** settings to minimize screen tearing during gameplay.
+- Added graphical setting adjustments for the **Boomer** bile effects, optimizing render performance.
 
 ### Fixed
-- Resolved FPS drops during "The Parish" finale due to graphical overload.
-- Fixed a memory leak issue that occurred with "Scavenge" mode after multiple rounds.
-- Corrected audio sync issues with the "Tank" music cues.
+- Corrected audio sync issues during **finale escape sequences** in **The Parish**.
+- Addressed graphical glitches with the **Managing Items** HUD during multiplayer matches.
 
+### Improvements
+- Increased loading speeds on **The Passing** campaign by optimizing map load routines.
+- Tweaked the **Director's AI** to reduce unexpected spawns during low player counts, enhancing game pacing.
 
-## [v2.3.0] - 2023-08-15
+---
+
+## [v2.1.0] - 2023-06-18
 ### Added
-- Introduced a new "Performance Benchmarks" feature to help players test and optimize their settings effectively.
-- Enhanced support for multi-core CPUs, improving frame rates in "Campaign" modes.
-
-### Changed
-- Updated "Versus Mode" performance metrics for better balancing.
-- Adjusted AI pathfinding for "Special Infected" to enhance game fluidity.
+- Added new debug tools for modders to analyze performance on custom maps.
+- Introduced an option for **Enhanced Lighting Effects** toggle to improve frame rates on older hardware.
 
 ### Fixed
-- Addressed random crashes relating to "No Mercy" campaign, especially during the last chapter.
-- Fixed an issue causing "Loader" errors when joining custom servers.
+- Fixed a crash associated with the **Tank** model spawning animations in custom servers.
+- Resolved issues with the **Survivors** health UI not displaying correctly in certain conditions.
 
+### Improvements
+- Adjusted the way **Special Infected** are spawned to reduce lag during encounters.
+- Improved load times on popular community maps by pre-caching assets more efficiently.
 
-## [v2.1.0] - 2023-05-10
+---
+
+## [v2.0.0] - 2023-04-10
 ### Added
-- Added new settings for "Ambient Occlusion" and "Shadows" to enhance performance on lower-end setups.
-- Integrated improved texture streaming to optimize memory usage during gameplay.
-
-### Changed
-- Tweaked lighting effects in "Blood Harvest" to enhance playability without sacrificing visual quality.
-- Altered load balancing for "Team Fortress" infected to minimize gameplay interruptions.
+- Major overhaul of the graphics engine for improved performance on modern hardware.
+- Added a new **Performance Mode** that streamlines graphical settings for lower-end PCs.
 
 ### Fixed
-- Resolved an issue where player models would disappear in "Death Toll" under certain conditions.
-- Fixed a bug that prevented certain graphic settings from saving between game sessions.
+- Fixed stuttering issues when switching weapons during high-mobility sequences.
+- Addressed a bug where player models would temporarily disappear during intense firefights.
 
-
-## [v2.0.0] - 2023-03-05
-### Added
-- Major performance overhaul for all campaign maps, resulting in smoother gameplay across the board.
-- Introduced new dynamic performance adjustments based on system specifications.
-
-### Changed
-- Enhanced "Local Server" performance to reduce latency and improve match stability.
-- Adjusted rendering distances in "The Passing" to enhance frame rates in dense areas.
-
-### Fixed
-- Fixed an issue that caused "Boomer" bile effects to be over-rendered in multiplayer matches.
-- Resolved various minor bugs that affected HUD display metrics during high-action
+###
