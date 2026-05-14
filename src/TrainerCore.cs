@@ -3,66 +3,72 @@ using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
-public class ProcessMemory
+public class TrainerCore
 {
-    private Process process;
+    private const string ProcessName = "left4dead2";
+    private static Process gameProcess;
+    private static IntPtr processHandle;
+
+    private static readonly IntPtr HealthAddress = (IntPtr)0x01234567; // Example address
+    private static readonly IntPtr StaminaAddress = (IntPtr)0x01234568; // Example address
 
     [DllImport("kernel32.dll")]
-    private static extern IntPtr OpenProcess(uint dwDesiredAccess, bool bInheritHandle, int dwProcessId);
-    
+    private static extern IntPtr OpenProcess(uint processAccess, bool bInheritHandle, int processId);
+
     [DllImport("kernel32.dll")]
-    private static extern bool ReadProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, byte[] lpBuffer, uint dwSize, out int lpNumberOfBytesRead);
-    
+    private static extern bool ReadProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, byte[] lpBuffer, uint size, out int lpNumberOfBytesRead);
+
     [DllImport("kernel32.dll")]
-    private static extern bool WriteProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, byte[] lpBuffer, uint dwSize, out int lpNumberOfBytesWritten);
-    
+    private static extern bool WriteProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, byte[] lpBuffer, uint size, out int lpNumberOfBytesWritten);
+
+    [DllImport("kernel32.dll")]
+    private static extern bool CloseHandle(IntPtr handle);
+
     private const uint PROCESS_VM_READ = 0x0010;
     private const uint PROCESS_VM_WRITE = 0x0020;
     private const uint PROCESS_VM_OPERATION = 0x0008;
 
-    public bool AttachToProcess(string processName)
+    public static bool AttachToProcess()
     {
-        process = Process.GetProcessesByName(processName)[0];
-        if (process == null) return false;
-        IntPtr hProcess = OpenProcess(PROCESS_VM_READ | PROCESS_VM_WRITE | PROCESS_VM_OPERATION, false, process.Id);
-        return hProcess != IntPtr.Zero;
+        gameProcess = Process.GetProcessesByName(ProcessName)[0];
+        if (gameProcess != null)
+        {
+            processHandle = OpenProcess(PROCESS_VM_READ | PROCESS_VM_WRITE | PROCESS_VM_OPERATION, false, gameProcess.Id);
+            return processHandle != IntPtr.Zero;
+        }
+        return false;
     }
 
-    public bool IsGameRunning(string processName)
+    public static bool IsGameRunning()
     {
-        return Process.GetProcessesByName(processName).Length > 0;
+        return Process.GetProcessesByName(ProcessName).Length > 0;
     }
 
-    public float ReadFloat(IntPtr address)
+    public static float ReadFloat(IntPtr address)
     {
         byte[] buffer = new byte[4];
-        ReadProcessMemory(process.Handle, address, buffer, (uint)buffer.Length, out _);
+        int bytesRead;
+        ReadProcessMemory(processHandle, address, buffer, (uint)buffer.Length, out bytesRead);
         return BitConverter.ToSingle(buffer, 0);
     }
 
-    public void WriteFloat(IntPtr address, float value)
+    public static void WriteFloat(IntPtr address, float value)
     {
         byte[] buffer = BitConverter.GetBytes(value);
-        WriteProcessMemory(process.Handle, address, buffer, (uint)buffer.Length, out _);
+        int bytesWritten;
+        WriteProcessMemory(processHandle, address, buffer, (uint)buffer.Length, out bytesWritten);
     }
 
-    public int ReadInt(IntPtr address)
+    public static int ReadInt(IntPtr address)
     {
         byte[] buffer = new byte[4];
-        ReadProcessMemory(process.Handle, address, buffer, (uint)buffer.Length, out _);
+        int bytesRead;
+        ReadProcessMemory(processHandle, address, buffer, (uint)buffer.Length, out bytesRead);
         return BitConverter.ToInt32(buffer, 0);
     }
 
-    public void WriteInt(IntPtr address, int value)
+    public static void WriteInt(IntPtr address, int value)
     {
         byte[] buffer = BitConverter.GetBytes(value);
-        WriteProcessMemory(process.Handle, address, buffer, (uint)buffer.Length, out _);
-    }
-
-    public static class Addresses
-    {
-        public static readonly IntPtr HealthAddress = new IntPtr(0x12345678); // Example address
-        public static readonly IntPtr AmmoAddress = new IntPtr(0x87654321);   // Example address
-    }
-}
-```
+        int bytesWritten;
+        WriteProcessMemory(processHandle, address, buffer
