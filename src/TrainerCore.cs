@@ -5,21 +5,24 @@ using System.Runtime.InteropServices;
 
 public class ProcessMemory
 {
-    private IntPtr processHandle;
     private Process process;
+    private IntPtr processHandle;
+
+    // Addresses of specific values in Left 4 Dead 2
+    private const int playerHealthAddress = 0x123456; // Replace with actual address
+    private const int playerAmmoAddress = 0x654321; // Replace with actual address
 
     public bool AttachToProcess(string processName)
     {
-        try
+        Process[] processes = Process.GetProcessesByName(processName);
+        if (processes.Length == 0)
         {
-            process = Process.GetProcessesByName(processName)[0];
-            processHandle = OpenProcess(ProcessAccessFlags.VirtualMemoryRead | ProcessAccessFlags.VirtualMemoryWrite, false, process.Id);
-            return processHandle != IntPtr.Zero;
+            return false; // Game not running
         }
-        catch
-        {
-            return false;
-        }
+
+        process = processes[0];
+        processHandle = OpenProcess(ProcessAccessFlags.All, false, process.Id);
+        return processHandle != IntPtr.Zero;
     }
 
     public bool IsGameRunning(string processName)
@@ -27,58 +30,48 @@ public class ProcessMemory
         return Process.GetProcessesByName(processName).Length > 0;
     }
 
-    public float ReadFloat(IntPtr address)
+    public float ReadFloat(int address)
     {
-        float value = 0f;
-        ReadProcessMemory(processHandle, address, out value, Marshal.SizeOf(typeof(float)), out _);
-        return value;
+        byte[] buffer = new byte[4];
+        ReadProcessMemory(processHandle, (IntPtr)address, buffer, buffer.Length, out _);
+        return BitConverter.ToSingle(buffer, 0);
     }
 
-    public void WriteFloat(IntPtr address, float value)
+    public void WriteFloat(int address, float value)
     {
-        WriteProcessMemory(processHandle, address, ref value, Marshal.SizeOf(typeof(float)), out _);
+        byte[] buffer = BitConverter.GetBytes(value);
+        WriteProcessMemory(processHandle, (IntPtr)address, buffer, buffer.Length, out _);
     }
 
-    public int ReadInt(IntPtr address)
+    public int ReadInt(int address)
     {
-        int value = 0;
-        ReadProcessMemory(processHandle, address, out value, Marshal.SizeOf(typeof(int)), out _);
-        return value;
+        byte[] buffer = new byte[4];
+        ReadProcessMemory(processHandle, (IntPtr)address, buffer, buffer.Length, out _);
+        return BitConverter.ToInt32(buffer, 0);
     }
 
-    public void WriteInt(IntPtr address, int value)
+    public void WriteInt(int address, int value)
     {
-        WriteProcessMemory(processHandle, address, ref value, Marshal.SizeOf(typeof(int)), out _);
+        byte[] buffer = BitConverter.GetBytes(value);
+        WriteProcessMemory(processHandle, (IntPtr)address, buffer, buffer.Length, out _);
     }
-
-    #region PInvoke
 
     [DllImport("kernel32.dll")]
     private static extern IntPtr OpenProcess(ProcessAccessFlags processAccess, bool bInheritHandle, int processId);
 
     [DllImport("kernel32.dll")]
-    private static extern bool ReadProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, out float lpBuffer, int dwSize, out IntPtr lpNumberOfBytesRead);
+    private static extern bool ReadProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, byte[] lpBuffer, int dwSize, out int lpNumberOfBytesRead);
 
     [DllImport("kernel32.dll")]
-    private static extern bool ReadProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, out int lpBuffer, int dwSize, out IntPtr lpNumberOfBytesRead);
-
-    [DllImport("kernel32.dll")]
-    private static extern bool WriteProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, ref float lpBuffer, int dwSize, out IntPtr lpNumberOfBytesWritten);
-
-    [DllImport("kernel32.dll")]
-    private static extern bool WriteProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, ref int lpBuffer, int dwSize, out IntPtr lpNumberOfBytesWritten);
-
-    #endregion
+    private static extern bool WriteProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, byte[] lpBuffer, int dwSize, out int lpNumberOfBytesWritten);
 
     [Flags]
     private enum ProcessAccessFlags : uint
     {
-        VirtualMemoryRead = 0x0010,
-        VirtualMemoryWrite = 0x0020
+        All = 0x1F0FFF,
+        Read = 0x0010,
+        Write = 0x0020,
+        Virtual = 0x0008,
     }
 }
-
-// Example static addresses for Left 4 Dead 2
-public static class GameAddresses
-{
-    public static readonly IntPtr Health
+```
