@@ -2,45 +2,51 @@
 # CHANGELOG.md
 
 ## [v2.4.1] - 2023-10-15
-### Fixed
-- Resolved a rare crash issue during the "The Sacrifice" campaign when using the "Advanced" AI Director settings.
-- Fixed performance drops experienced in "Dark Carnival" when multiple special infected spawn.
-
-### Changed
-- Improved performance optimizations for low-end hardware, resulting in a smoother gameplay experience.
-- Tweaked rendering settings for improved frame rates in the "Versus" game mode on maps with heavy foliage.
-
-## [v2.3.0] - 2023-08-10
 ### Added
-- Introduced a new caching system for quicker loading times in "Dead Air" and other large maps.
-- Added support for dynamic resolution scaling, allowing players to maintain responsiveness during intense action scenes.
+- Enhanced optimization for the **Director** AI, improving spawn timing for infected units.
+- Improved performance on lower-end systems by reducing texture load times in **The Passing** campaign.
 
 ### Changed
-- Enhanced the "Rescue" helicopter's landing animation to reduce lag during high-player-count sessions.
-- Adjusted the physics simulation to improve performance during the "Survivor" rush events in "No Mercy".
+- Tweaked LOD (Level of Detail) settings for props and environment in **No Mercy**, resulting in smoother frame rates during intense combat scenes.
+- Adjusted client-side settings to allow better handling of network latency during online matches.
 
 ### Fixed
-- Addressed an issue causing frame rate drops during the horde events in "The Passing".
-- Fixed an exploit that allowed players to bypass spawn restrictions in "The Last Stand".
+- Resolved an issue where the **Survivor**’s HUD would occasionally flicker during heavy action.
+- Fixed crashes related to specific character models in **The Sacrifice** when using custom skins.
 
-## [v2.1.0] - 2023-05-20
+---
+
+## [v2.3.0] - 2023-08-29
 ### Added
-- Initial support for 64-bit architecture, enabling better memory management and performance benefits.
-- Implemented a new graphical option to toggle "Detailed Zombies" for enhanced visual fidelity on capable systems.
+- New graphics settings options available in the **Options** menu, allowing for finer control over shadow and lighting effects.
+- Introduction of an auto-optimizing feature that adjusts settings based on system performance during gameplay.
 
 ### Changed
-- Under-the-hood optimizations to the "AI Director" to improve the pacing of enemy spawns without sacrificing performance.
-- Reduced loading times for "Scavenge" mode by streamlining map asset handling.
+- Revamped the **Melee** weapon performance to ensure smoother animations and reduced input lag.
+- Enhanced lighting in the **Dark Carnival** chapter to improve visibility without sacrificing performance.
 
 ### Fixed
-- Fixed graphical glitches noticed in cinematic scenes at the beginning of each campaign.
-- Resolved a bug where players experienced dropped frames during the "Tank" fights while using custom skins.
+- Addressed the issue causing memory leaks during prolonged gameplay sessions.
+- Corrected bugs related to player spawning in coop mode on the **Dead Center** map, ensuring all players spawn correctly with consistent latency.
 
-## [v2.0.0] - 2023-03-01
+---
+
+## [v2.1.0] - 2023-06-15
 ### Added
-- Major overhaul of the game's engine for improved overall performance.
-- Introduced a new "Performance Mode" that balances graphics for higher frame rates.
+- Added support for DirectX 12 for improved graphics rendering and frame rate boosts.
+- New audio optimizations to reduce stuttering during high-action sequences.
 
 ### Changed
-- Enhanced AI behavior for better coordination among special infected, resulting in more challenging gameplay without increased lag.
-- Reworked particle effects in the "Molotov" and "Boomer" bile to reduce system strain during visual effects-heavy
+- The performance of **Witch** AI has been adjusted to reduce CPU load when she is not present in the immediate vicinity.
+- Updated texture resolutions for characters in campaigns with significant visual impact like **Blood Harvest**.
+
+### Fixed
+- Fixed an issue where certain special infected would cause significant frame drops on multiplayer servers.
+- Resolved bugs related to the spawning of AI during **Versus** mode leading to unexpected game behavior.
+
+---
+
+## [v2.0.0] - 2023-04-01
+### Added
+- Major overhaul of the game engine to support performance enhancements across all game modes.
+- Introduced a new **Replay** feature to allow players to
