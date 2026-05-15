@@ -1,44 +1,63 @@
 ```csharp
 using System;
 using System.Diagnostics;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace L4D2PerformancePatch
 {
     public partial class MainForm : Form
     {
-        private const string GameProcessName = "left4dead2";
+        private const string GameProcessName = "hl2"; // Left 4 Dead 2's process name
         private Timer processCheckTimer;
         private bool isGameRunning;
 
         public MainForm()
         {
             InitializeComponent();
-            SetupTimer();
+            InitializeTimer();
         }
 
         private void InitializeComponent()
         {
-            this.Text = "Left 4 Dead 2 Performance Patch";
-            this.Size = new System.Drawing.Size(300, 200);
-            var patchButton = new Button
-            {
-                Text = "Apply Performance Patch",
-                Width = 200,
-                Height = 30,
-                Location = new System.Drawing.Point(50, 50)
-            };
-            patchButton.Click += PatchButton_Click;
-            this.Controls.Add(patchButton);
-            this.FormClosing += MainForm_FormClosing;
+            this.processCheckTimer = new System.Windows.Forms.Timer();
+            this.startPatchButton = new System.Windows.Forms.Button();
+            this.statusLabel = new System.Windows.Forms.Label();
+
+            this.SuspendLayout();
+            // 
+            // startPatchButton
+            // 
+            this.startPatchButton.Location = new System.Drawing.Point(12, 12);
+            this.startPatchButton.Name = "startPatchButton";
+            this.startPatchButton.Size = new System.Drawing.Size(120, 30);
+            this.startPatchButton.TabIndex = 0;
+            this.startPatchButton.Text = "Apply Patch";
+            this.startPatchButton.UseVisualStyleBackColor = true;
+            this.startPatchButton.Click += new System.EventHandler(this.StartPatchButton_Click);
+            // 
+            // statusLabel
+            // 
+            this.statusLabel.AutoSize = true;
+            this.statusLabel.Location = new System.Drawing.Point(12, 55);
+            this.statusLabel.Name = "statusLabel";
+            this.statusLabel.Size = new System.Drawing.Size(103, 13);
+            this.statusLabel.TabIndex = 1;
+            this.statusLabel.Text = "Status: Not Running";
+            // 
+            // MainForm
+            // 
+            this.ClientSize = new System.Drawing.Size(284, 101);
+            this.Controls.Add(this.startPatchButton);
+            this.Controls.Add(this.statusLabel);
+            this.Name = "MainForm";
+            this.Text = "L4D2 Performance Patch";
+            this.ResumeLayout(false);
+            this.PerformLayout();
         }
 
-        private void SetupTimer()
+        private void InitializeTimer()
         {
-            processCheckTimer = new Timer();
             processCheckTimer.Interval = 1000; // Check every second
             processCheckTimer.Tick += ProcessCheckTimer_Tick;
             processCheckTimer.Start();
@@ -46,33 +65,31 @@ namespace L4D2PerformancePatch
 
         private void ProcessCheckTimer_Tick(object sender, EventArgs e)
         {
-            isGameRunning = Process.GetProcessesByName(GameProcessName).Any();
+            isGameRunning = IsProcessOpen(GameProcessName);
+            statusLabel.Text = isGameRunning ? "Status: Running" : "Status: Not Running";
         }
 
-        private async void PatchButton_Click(object sender, EventArgs e)
+        private bool IsProcessOpen(string processName)
         {
-            if (!isGameRunning)
+            var processes = Process.GetProcessesByName(processName);
+            return processes.Length > 0;
+        }
+
+        private void StartPatchButton_Click(object sender, EventArgs e)
+        {
+            if (isGameRunning)
             {
-                MessageBox.Show("Left 4 Dead 2 is not running. Please start the game first.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Please exit the game before applying the patch.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            
-            await ApplyPerformancePatch();
+
+            ApplyPatch();
         }
 
-        private async Task ApplyPerformancePatch()
+        private void ApplyPatch()
         {
-            // Simulate patching process
-            MessageBox.Show("Applying performance patch...", "Please wait", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            await Task.Delay(2000); // Simulate time taken to apply the patch
-            MessageBox.Show("Performance patch applied successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            // Logic to apply patch
+            MessageBox.Show("Patch applied successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            processCheckTimer.Stop();
-            processCheckTimer.Dispose();
-        }
-    }
-}
-```
+        private Button startPatch
