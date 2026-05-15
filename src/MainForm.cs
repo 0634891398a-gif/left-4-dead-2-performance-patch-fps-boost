@@ -10,62 +10,82 @@ namespace L4D2PerformancePatch
 {
     public partial class MainForm : Form
     {
-        private Timer processCheckTimer;
-        private const string l4d2ProcessName = "left4dead2";
-        private const string patchStatus = "Performance patch applied!";
-        private bool patchApplied = false;
+        private const string ProcessName = "left4dead2";
+        private Timer _processCheckTimer;
+        private Button _applyPatchButton;
+        private Label _statusLabel;
 
         public MainForm()
         {
             InitializeComponent();
-            SetupTimer();
+            InitializeCustomComponents();
+            StartProcessCheck();
         }
 
-        private void SetupTimer()
+        private void InitializeCustomComponents()
         {
-            processCheckTimer = new Timer();
-            processCheckTimer.Interval = 1000; // Check every second
-            processCheckTimer.Tick += ProcessCheckTimer_Tick;
-            processCheckTimer.Start();
+            this.Text = "Left 4 Dead 2 Performance Patch";
+            this.Size = new Size(400, 200);
+
+            _applyPatchButton = new Button
+            {
+                Text = "Apply Patch",
+                Location = new Point(150, 100),
+                Enabled = false
+            };
+            _applyPatchButton.Click += ApplyPatchButton_Click;
+
+            _statusLabel = new Label
+            {
+                Location = new Point(50, 30),
+                Size = new Size(300, 20)
+            };
+
+            this.Controls.Add(_applyPatchButton);
+            this.Controls.Add(_statusLabel);
+        }
+
+        private void StartProcessCheck()
+        {
+            _processCheckTimer = new Timer { Interval = 1000 };
+            _processCheckTimer.Tick += ProcessCheckTimer_Tick;
+            _processCheckTimer.Start();
         }
 
         private void ProcessCheckTimer_Tick(object sender, EventArgs e)
         {
-            var isL4D2Running = Process.GetProcessesByName(l4d2ProcessName).Any();
-            if (isL4D2Running && !patchApplied)
+            var runningProcesses = Process.GetProcessesByName(ProcessName);
+            if (runningProcesses.Any())
             {
-                ApplyPatch();
+                _applyPatchButton.Enabled = true;
+                _statusLabel.Text = "Game Running: Ready to Apply Patch.";
             }
-            else if (!isL4D2Running && patchApplied)
+            else
             {
-                RemovePatch();
+                _applyPatchButton.Enabled = false;
+                _statusLabel.Text = "Game Not Running: Patch Disabled.";
             }
         }
 
-        private void ApplyPatch()
+        private void ApplyPatchButton_Click(object sender, EventArgs e)
         {
-            // Logic to apply the performance patch
-            MessageBox.Show(patchStatus, "Patch Status", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            patchApplied = true;
+            // Simulated patch application logic
+            ApplyPerformancePatch();
         }
 
-        private void RemovePatch()
+        private void ApplyPerformancePatch()
         {
-            // Logic to remove the performance patch
-            MessageBox.Show("Performance patch removed!", "Patch Status", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            patchApplied = false;
-        }
+            try
+            {
+                // Perform the patch operation
+                // e.g., Adjust graphics settings, modify config files, etc.
 
-        private void InitializeComponent()
-        {
-            this.SuspendLayout();
-            // 
-            // MainForm
-            // 
-            this.ClientSize = new System.Drawing.Size(300, 200);
-            this.Name = "MainForm";
-            this.Text = "Left 4 Dead 2 Performance Patch";
-            this.ResumeLayout(false);
+                MessageBox.Show("Performance patch applied successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error applying patch: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }
