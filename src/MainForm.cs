@@ -1,16 +1,18 @@
 ```csharp
 using System;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace L4D2PerformancePatch
 {
     public partial class MainForm : Form
     {
-        private const string GameProcessName = "left4dead2"; // Process name without ".exe"
+        // Game-specific fields
+        private const string GameProcessName = "left4dead2";
+        private bool isGameRunning = false;
         private Timer processCheckTimer;
-        private bool isGameRunning;
 
         public MainForm()
         {
@@ -20,49 +22,58 @@ namespace L4D2PerformancePatch
 
         private void InitializeCustomComponents()
         {
+            // Initialize and configure the Timer
             processCheckTimer = new Timer();
             processCheckTimer.Interval = 1000; // Check every second
             processCheckTimer.Tick += ProcessCheckTimer_Tick;
             processCheckTimer.Start();
+
+            // Add event handlers for buttons
+            btnApplyPatch.Click += BtnApplyPatch_Click;
+            btnRemovePatch.Click += BtnRemovePatch_Click;
         }
 
         private void ProcessCheckTimer_Tick(object sender, EventArgs e)
         {
-            isGameRunning = Process.GetProcessesByName(GameProcessName).Length > 0;
-            statusLabel.Text = isGameRunning ? "Game is running" : "Game is not running";
-
-            patchButton.Enabled = isGameRunning && !IsPatched();
-            unpatchButton.Enabled = isGameRunning && IsPatched();
+            isGameRunning = Process.GetProcessesByName(GameProcessName).Any();
+            UpdateUI();
         }
 
-        private bool IsPatched()
+        private void UpdateUI()
         {
-            // Replace with actual patch check implementation
-            return false; 
+            lblStatus.Text = isGameRunning ? "Game is running" : "Game is not running";
+            btnApplyPatch.Enabled = !isGameRunning;
+            btnRemovePatch.Enabled = isGameRunning;
         }
 
-        private void patchButton_Click(object sender, EventArgs e)
+        private async void BtnApplyPatch_Click(object sender, EventArgs e)
         {
-            if (isGameRunning)
+            if (MessageBox.Show("Are you sure you want to apply the performance patch?", "Apply Patch", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                // Implement patching logic here
-                MessageBox.Show("Patching the game for performance improvements.", "Patching", MessageBoxButtons.OK);
+                await Task.Run(() => ApplyPatch());
+                MessageBox.Show("Performance patch applied successfully!", "Success", MessageBoxButtons.OK);
             }
         }
 
-        private void unpatchButton_Click(object sender, EventArgs e)
+        private async void BtnRemovePatch_Click(object sender, EventArgs e)
         {
-            if (isGameRunning)
+            if (MessageBox.Show("Are you sure you want to remove the performance patch?", "Remove Patch", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                // Implement unpatching logic here
-                MessageBox.Show("Unpatching the game.", "Unpatching", MessageBoxButtons.OK);
+                await Task.Run(() => RemovePatch());
+                MessageBox.Show("Performance patch removed successfully!", "Success", MessageBoxButtons.OK);
             }
         }
 
-        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        private void ApplyPatch()
         {
-            processCheckTimer.Stop();
-            processCheckTimer.Dispose();
+            // Implementation of patch application
+            // This can involve file manipulations, registry edits, etc.
+        }
+
+        private void RemovePatch()
+        {
+            // Implementation of patch removal
+            // This can involve reverting changes made by ApplyPatch
         }
     }
 }
