@@ -1,8 +1,6 @@
 ```csharp
 using System;
 using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -10,82 +8,61 @@ namespace L4D2PerformancePatch
 {
     public partial class MainForm : Form
     {
-        private const string ProcessName = "left4dead2";
-        private Timer _processCheckTimer;
-        private Button _applyPatchButton;
-        private Label _statusLabel;
+        private const string GameProcessName = "left4dead2"; // Process name without ".exe"
+        private Timer processCheckTimer;
+        private bool isGameRunning;
 
         public MainForm()
         {
             InitializeComponent();
             InitializeCustomComponents();
-            StartProcessCheck();
         }
 
         private void InitializeCustomComponents()
         {
-            this.Text = "Left 4 Dead 2 Performance Patch";
-            this.Size = new Size(400, 200);
-
-            _applyPatchButton = new Button
-            {
-                Text = "Apply Patch",
-                Location = new Point(150, 100),
-                Enabled = false
-            };
-            _applyPatchButton.Click += ApplyPatchButton_Click;
-
-            _statusLabel = new Label
-            {
-                Location = new Point(50, 30),
-                Size = new Size(300, 20)
-            };
-
-            this.Controls.Add(_applyPatchButton);
-            this.Controls.Add(_statusLabel);
-        }
-
-        private void StartProcessCheck()
-        {
-            _processCheckTimer = new Timer { Interval = 1000 };
-            _processCheckTimer.Tick += ProcessCheckTimer_Tick;
-            _processCheckTimer.Start();
+            processCheckTimer = new Timer();
+            processCheckTimer.Interval = 1000; // Check every second
+            processCheckTimer.Tick += ProcessCheckTimer_Tick;
+            processCheckTimer.Start();
         }
 
         private void ProcessCheckTimer_Tick(object sender, EventArgs e)
         {
-            var runningProcesses = Process.GetProcessesByName(ProcessName);
-            if (runningProcesses.Any())
+            isGameRunning = Process.GetProcessesByName(GameProcessName).Length > 0;
+            statusLabel.Text = isGameRunning ? "Game is running" : "Game is not running";
+
+            patchButton.Enabled = isGameRunning && !IsPatched();
+            unpatchButton.Enabled = isGameRunning && IsPatched();
+        }
+
+        private bool IsPatched()
+        {
+            // Replace with actual patch check implementation
+            return false; 
+        }
+
+        private void patchButton_Click(object sender, EventArgs e)
+        {
+            if (isGameRunning)
             {
-                _applyPatchButton.Enabled = true;
-                _statusLabel.Text = "Game Running: Ready to Apply Patch.";
-            }
-            else
-            {
-                _applyPatchButton.Enabled = false;
-                _statusLabel.Text = "Game Not Running: Patch Disabled.";
+                // Implement patching logic here
+                MessageBox.Show("Patching the game for performance improvements.", "Patching", MessageBoxButtons.OK);
             }
         }
 
-        private void ApplyPatchButton_Click(object sender, EventArgs e)
+        private void unpatchButton_Click(object sender, EventArgs e)
         {
-            // Simulated patch application logic
-            ApplyPerformancePatch();
+            if (isGameRunning)
+            {
+                // Implement unpatching logic here
+                MessageBox.Show("Unpatching the game.", "Unpatching", MessageBoxButtons.OK);
+            }
         }
 
-        private void ApplyPerformancePatch()
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            try
-            {
-                // Perform the patch operation
-                // e.g., Adjust graphics settings, modify config files, etc.
-
-                MessageBox.Show("Performance patch applied successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error applying patch: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            processCheckTimer.Stop();
+            processCheckTimer.Dispose();
         }
     }
 }
