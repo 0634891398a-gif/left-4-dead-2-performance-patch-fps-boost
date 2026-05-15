@@ -5,32 +5,25 @@ using System.Runtime.InteropServices;
 
 public class ProcessMemory
 {
-    private IntPtr processHandle;
     private Process process;
+    private IntPtr processHandle;
 
-    [DllImport("kernel32.dll")]
-    private static extern IntPtr OpenProcess(int processAccess, bool bInheritHandle, int processId);
-    
-    [DllImport("kernel32.dll")]
-    private static extern bool CloseHandle(IntPtr hObject);
-    
-    [DllImport("kernel32.dll")]
-    private static extern int ReadProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, byte[] lpBuffer, int dwSize, out int lpNumberOfBytesWritten);
-    
-    [DllImport("kernel32.dll")]
-    private static extern int WriteProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, byte[] lpBuffer, int dwSize, out int lpNumberOfBytesWritten);
-
-    private const int PROCESS_VM_READ = 0x0010;
-    private const int PROCESS_VM_WRITE = 0x0020;
-    private const int PROCESS_VM_OPERATION = 0x0008;
+    // Example static addresses (you'll need to find the actual ones)
+    private const int BASE_ADDRESS = 0x12345678; // Base address for the game's memory
+    private const int PLAYER_HEALTH_OFFSET = 0x0000ABCD; // Example offset for player's health
 
     public bool AttachToProcess(string processName)
     {
-        process = Process.GetProcessesByName(processName).FirstOrDefault();
-        if (process == null) return false;
-
-        processHandle = OpenProcess(PROCESS_VM_READ | PROCESS_VM_WRITE | PROCESS_VM_OPERATION, false, process.Id);
-        return processHandle != IntPtr.Zero;
+        try
+        {
+            process = Process.GetProcessesByName(processName)[0];
+            processHandle = OpenProcess(ProcessAccessFlags.All, false, process.Id);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
     }
 
     public bool IsGameRunning(string processName)
@@ -38,43 +31,46 @@ public class ProcessMemory
         return Process.GetProcessesByName(processName).Length > 0;
     }
 
-    public float ReadFloat(IntPtr address)
+    public float ReadFloat(int offset)
     {
         byte[] buffer = new byte[4];
-        ReadProcessMemory(processHandle, address, buffer, buffer.Length, out _);
+        ReadProcessMemory(processHandle, BASE_ADDRESS + offset, buffer, buffer.Length, out _);
         return BitConverter.ToSingle(buffer, 0);
     }
 
-    public void WriteFloat(IntPtr address, float value)
+    public void WriteFloat(int offset, float value)
     {
         byte[] buffer = BitConverter.GetBytes(value);
-        WriteProcessMemory(processHandle, address, buffer, buffer.Length, out _);
+        WriteProcessMemory(processHandle, BASE_ADDRESS + offset, buffer, buffer.Length, out _);
     }
 
-    public int ReadInt(IntPtr address)
+    public int ReadInt(int offset)
     {
         byte[] buffer = new byte[4];
-        ReadProcessMemory(processHandle, address, buffer, buffer.Length, out _);
+        ReadProcessMemory(processHandle, BASE_ADDRESS + offset, buffer, buffer.Length, out _);
         return BitConverter.ToInt32(buffer, 0);
     }
 
-    public void WriteInt(IntPtr address, int value)
+    public void WriteInt(int offset, int value)
     {
         byte[] buffer = BitConverter.GetBytes(value);
-        WriteProcessMemory(processHandle, address, buffer, buffer.Length, out _);
+        WriteProcessMemory(processHandle, BASE_ADDRESS + offset, buffer, buffer.Length, out _);
     }
 
-    public void Close()
+    [DllImport("kernel32.dll")]
+    private static extern IntPtr OpenProcess(ProcessAccessFlags processAccess, bool bInheritHandle, int processId);
+    
+    [DllImport("kernel32.dll")]
+    private static extern bool ReadProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, byte[] lpBuffer, int dwSize, out int lpNumberOfBytesRead);
+
+    [DllImport("kernel32.dll")]
+    private static extern bool WriteProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, byte[] lpBuffer, int dwSize, out int lpNumberOfBytesWritten);
+
+    [Flags]
+    private enum ProcessAccessFlags : uint
     {
-        if (processHandle != IntPtr.Zero)
-        {
-            CloseHandle(processHandle);
-        }
+        All = 0x1F0FFF
     }
 }
-
-// Example static addresses for Left 4 Dead 2
-public static class L4D2Addresses
-{
-    public static readonly IntPtr HealthAddress = (IntPtr)0x12345678; // Replace with actual address
-    public static readonly IntPtr AmmoAddress = (
+```
+This C# class `ProcessMemory` contains necessary methods for reading and writing memory in a process, specifically tuned for a hypothetical Left 4 Dead 2 patch. The static addresses for the game's memory should be replaced with actual values. The code uses PInvoke to access Windows API
