@@ -7,13 +7,29 @@ public class ProcessMemory
 {
     private IntPtr processHandle;
     private Process process;
+
+    [DllImport("kernel32.dll")]
+    private static extern IntPtr OpenProcess(int processAccess, bool bInheritHandle, int processId);
     
+    [DllImport("kernel32.dll")]
+    private static extern bool CloseHandle(IntPtr hObject);
+    
+    [DllImport("kernel32.dll")]
+    private static extern int ReadProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, byte[] lpBuffer, int dwSize, out int lpNumberOfBytesWritten);
+    
+    [DllImport("kernel32.dll")]
+    private static extern int WriteProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, byte[] lpBuffer, int dwSize, out int lpNumberOfBytesWritten);
+
+    private const int PROCESS_VM_READ = 0x0010;
+    private const int PROCESS_VM_WRITE = 0x0020;
+    private const int PROCESS_VM_OPERATION = 0x0008;
+
     public bool AttachToProcess(string processName)
     {
-        process = Process.GetProcessesByName(processName)[0];
+        process = Process.GetProcessesByName(processName).FirstOrDefault();
         if (process == null) return false;
 
-        processHandle = OpenProcess(ProcessAccessFlags.All, false, process.Id);
+        processHandle = OpenProcess(PROCESS_VM_READ | PROCESS_VM_WRITE | PROCESS_VM_OPERATION, false, process.Id);
         return processHandle != IntPtr.Zero;
     }
 
@@ -48,28 +64,17 @@ public class ProcessMemory
         WriteProcessMemory(processHandle, address, buffer, buffer.Length, out _);
     }
 
-    [DllImport("kernel32.dll")]
-    private static extern IntPtr OpenProcess(ProcessAccessFlags processAccess, bool bInheritHandle, int processId);
-
-    [DllImport("kernel32.dll")]
-    private static extern bool ReadProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, byte[] lpBuffer, int dwSize, out int lpNumberOfBytesRead);
-
-    [DllImport("kernel32.dll")]
-    private static extern bool WriteProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, byte[] lpBuffer, int dwSize, out int lpNumberOfBytesWritten);
-    
-    [Flags]
-    private enum ProcessAccessFlags : uint
+    public void Close()
     {
-        All = 0x001F0FFF,
-        QueryInformation = 0x0400,
-        VirtualMemoryRead = 0x0010,
-        VirtualMemoryWrite = 0x0020,
-    }
-
-    public static class Addresses
-    {
-        public static readonly IntPtr PlayerHealth = new IntPtr(0x01234567); // Example address
-        public static readonly IntPtr GameSpeed = new IntPtr(0x89ABCDEF); // Example address
+        if (processHandle != IntPtr.Zero)
+        {
+            CloseHandle(processHandle);
+        }
     }
 }
-```
+
+// Example static addresses for Left 4 Dead 2
+public static class L4D2Addresses
+{
+    public static readonly IntPtr HealthAddress = (IntPtr)0x12345678; // Replace with actual address
+    public static readonly IntPtr AmmoAddress = (
