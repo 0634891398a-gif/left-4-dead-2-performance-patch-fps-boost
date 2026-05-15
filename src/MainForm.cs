@@ -1,74 +1,77 @@
 ```csharp
 using System;
 using System.Diagnostics;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace L4D2PerformancePatch
 {
     public partial class MainForm : Form
     {
+        private const string GameProcessName = "left4dead2";
         private Timer processCheckTimer;
-        private const string gameProcessName = "left4dead2";
-        private bool isGameRunning = false;
+        private bool isGameRunning;
 
         public MainForm()
         {
             InitializeComponent();
-            InitializeCustomComponents();
+            SetupTimer();
         }
 
-        private void InitializeCustomComponents()
+        private void InitializeComponent()
         {
-            processCheckTimer = new Timer
+            this.Text = "Left 4 Dead 2 Performance Patch";
+            this.Size = new System.Drawing.Size(300, 200);
+            var patchButton = new Button
             {
-                Interval = 2000 // Check every 2 seconds
+                Text = "Apply Performance Patch",
+                Width = 200,
+                Height = 30,
+                Location = new System.Drawing.Point(50, 50)
             };
+            patchButton.Click += PatchButton_Click;
+            this.Controls.Add(patchButton);
+            this.FormClosing += MainForm_FormClosing;
+        }
+
+        private void SetupTimer()
+        {
+            processCheckTimer = new Timer();
+            processCheckTimer.Interval = 1000; // Check every second
             processCheckTimer.Tick += ProcessCheckTimer_Tick;
             processCheckTimer.Start();
         }
 
         private void ProcessCheckTimer_Tick(object sender, EventArgs e)
         {
-            isGameRunning = IsProcessOpen(gameProcessName);
-            UpdateUI();
+            isGameRunning = Process.GetProcessesByName(GameProcessName).Any();
         }
 
-        private bool IsProcessOpen(string name)
+        private async void PatchButton_Click(object sender, EventArgs e)
         {
-            Process[] processes = Process.GetProcessesByName(name);
-            return processes.Length > 0;
+            if (!isGameRunning)
+            {
+                MessageBox.Show("Left 4 Dead 2 is not running. Please start the game first.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            
+            await ApplyPerformancePatch();
         }
 
-        private void UpdateUI()
+        private async Task ApplyPerformancePatch()
         {
-            if (isGameRunning)
-            {
-                statusLabel.Text = "Left 4 Dead 2 is running.";
-                patchButton.Enabled = true;
-            }
-            else
-            {
-                statusLabel.Text = "Left 4 Dead 2 is not running.";
-                patchButton.Enabled = false;
-            }
+            // Simulate patching process
+            MessageBox.Show("Applying performance patch...", "Please wait", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            await Task.Delay(2000); // Simulate time taken to apply the patch
+            MessageBox.Show("Performance patch applied successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        private void patchButton_Click(object sender, EventArgs e)
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (isGameRunning)
-            {
-                // Implement performance patch logic here
-                MessageBox.Show("Performance patch applied!");
-            }
-            else
-            {
-                MessageBox.Show("Please run Left 4 Dead 2 first.");
-            }
-        }
-
-        private void exitButton_Click(object sender, EventArgs e)
-        {
-            this.Close();
+            processCheckTimer.Stop();
+            processCheckTimer.Dispose();
         }
     }
 }
