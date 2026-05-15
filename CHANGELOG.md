@@ -2,51 +2,62 @@
 # CHANGELOG.md
 
 ## [v2.4.1] - 2023-10-15
-### Added
-- Enhanced optimization for the **Director** AI, improving spawn timing for infected units.
-- Improved performance on lower-end systems by reducing texture load times in **The Passing** campaign.
+### Improved Performance
+- Optimized network latency during competitive matches in Versus mode.
+- Enhanced AI pathfinding for Special Infected to reduce stuttering during encounters.
 
-### Changed
-- Tweaked LOD (Level of Detail) settings for props and environment in **No Mercy**, resulting in smoother frame rates during intense combat scenes.
-- Adjusted client-side settings to allow better handling of network latency during online matches.
+### Bug Fixes
+- Fixed a crash that occurred when playing with custom mutations.
+- Resolved an issue where the HUD would flicker when using custom skins.
 
-### Fixed
-- Resolved an issue where the **Survivor**’s HUD would occasionally flicker during heavy action.
-- Fixed crashes related to specific character models in **The Sacrifice** when using custom skins.
-
----
-
-## [v2.3.0] - 2023-08-29
-### Added
-- New graphics settings options available in the **Options** menu, allowing for finer control over shadow and lighting effects.
-- Introduction of an auto-optimizing feature that adjusts settings based on system performance during gameplay.
-
-### Changed
-- Revamped the **Melee** weapon performance to ensure smoother animations and reduced input lag.
-- Enhanced lighting in the **Dark Carnival** chapter to improve visibility without sacrificing performance.
-
-### Fixed
-- Addressed the issue causing memory leaks during prolonged gameplay sessions.
-- Corrected bugs related to player spawning in coop mode on the **Dead Center** map, ensuring all players spawn correctly with consistent latency.
+### Features
+- Added support for new community-created maps in the scenario browser.
+- Updated the animations for the Jockey and Charger to improve fluidity.
 
 ---
 
-## [v2.1.0] - 2023-06-15
-### Added
-- Added support for DirectX 12 for improved graphics rendering and frame rate boosts.
-- New audio optimizations to reduce stuttering during high-action sequences.
+## [v2.3.0] - 2023-07-01
+### Performance Enhancements
+- Reduced memory usage during extended play sessions, improving overall stability.
+- Implemented faster loading times for campaigns in the Main Menu.
 
-### Changed
-- The performance of **Witch** AI has been adjusted to reduce CPU load when she is not present in the immediate vicinity.
-- Updated texture resolutions for characters in campaigns with significant visual impact like **Blood Harvest**.
+### Bug Fixes
+- Fixed an issue where players could get stuck in the "Safe Room" during a campaign.
+- Addressed a bug that caused the game to crash when the map change occurred in Versus mode.
 
-### Fixed
-- Fixed an issue where certain special infected would cause significant frame drops on multiplayer servers.
-- Resolved bugs related to the spawning of AI during **Versus** mode leading to unexpected game behavior.
+### Features
+- Introduced a new Spectator Mode for observing players in real-time during private matches.
+- Added voice chat optimization to minimize latency for better communication among survivors.
 
 ---
 
-## [v2.0.0] - 2023-04-01
-### Added
-- Major overhaul of the game engine to support performance enhancements across all game modes.
-- Introduced a new **Replay** feature to allow players to
+## [v2.1.0] - 2023-04-20
+### Performance Improvements
+- Enhanced FPS stability, especially in areas with heavy zombie spawns.
+- Improved rendering of graphical effects during special infected attacks.
+
+### Bug Fixes
+- Corrected hit registration issues with melee weapons against the Tank.
+- Fixed texture issues on several popular custom maps causing graphical glitches.
+
+### Features
+- Revamped the matchmaking system, allowing for filtered searches by game mode.
+- Added a new "Daily Challenge" feature to encourage varied gameplay experiences.
+
+---
+
+## [v2.0.0] - 2023-01-10
+### Major Enhancements
+- Complete overhaul of the game's audio engine for improved sound clarity and immersive gameplay.
+- Reworked the Survivor AI to be more responsive and effective during campaigns.
+
+### Bug Fixes
+- Fixed a longstanding issue with the Molotov Cocktail not igniting properly on some surfaces.
+- Addressed a bug that resulted in players being unable to join games with custom scripts.
+
+### Features
+- Launch of the "Survivor Showdown" event mode featuring new mechanics and objectives.
+- Introduced new special infected variants with unique abilities to challenge players.
+
+---
+```
